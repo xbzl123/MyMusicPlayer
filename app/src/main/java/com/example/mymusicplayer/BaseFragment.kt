@@ -12,28 +12,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
 
 abstract class BaseFragment<DB : ViewDataBinding,VM : LifecycleViewModel>: Fragment() {
-    lateinit var vm:VM
-    lateinit var db:DB
+    lateinit var mViewModel : VM
+    lateinit var mDataBinding : DB
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("","11=============test=")
-
-        db = DataBindingUtil.inflate(inflater,getContentViewId(), container, false)
-        vm = ViewModelProvider(this).get(getViewModelClass())
-        Log.d("","22=============test=")
-
+        mDataBinding = DataBindingUtil.inflate(inflater,getContentViewId(), container, false)
+        mViewModel = ViewModelProvider(this).get(getViewModelClass())
         bindViewModel()
-        return db.root
+        return mDataBinding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        Log.d("","33=============test=")
-
-    }
     abstract fun getContentViewId(): Int
 
     abstract fun bindViewModel()

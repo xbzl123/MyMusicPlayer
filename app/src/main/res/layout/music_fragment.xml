@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data class ="com.example.mymusicplayer.databing.MusicBinding">
+    <data >
         <variable
             name="viewmodel" type="com.example.mymusicplayer.ui.music.MusicViewModel"></variable>
     </data>
@@ -18,12 +18,11 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="MusicFragment"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{()->viewmodel.test()}"
+            android:text="@{viewmodel.nameObserver}"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
