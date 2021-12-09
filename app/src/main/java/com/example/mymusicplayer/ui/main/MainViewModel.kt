@@ -10,19 +10,20 @@ import android.util.Log
 import android.widget.Toast
 import androidx.databinding.ObservableField
 import com.blankj.utilcode.util.Utils
+import com.example.mymusicplayer.http.City
 import com.example.mymusicplayer.http.WeatherApi
+import com.example.mymusicplayer.http.zhuhai
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
 import java.util.*
 import okhttp3.ResponseBody
+import org.simpleframework.xml.Serializer
+import org.simpleframework.xml.core.Persister
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import retrofit2.Retrofit
-
-
-
 
 
 data class WeatherInfo(var address:LocaleInfo,var tempe:String,var weather:String)
@@ -55,8 +56,8 @@ class MainViewModel : LifecycleViewModel() {
                     }
                 }
 
-                var toString:String = result.toString().toLowerCase()
-                requstWeather(toString)
+                var pinyinName:String = result.toString().toLowerCase()
+                requstWeather(pinyinName)
                // "http://flash.weather.com.cn/wmaps/xml/aomen.xml"
                 Toast.makeText(Utils.getApp(),addr, Toast.LENGTH_LONG).show()
             }
@@ -75,9 +76,14 @@ class MainViewModel : LifecycleViewModel() {
         // 不同的是如果是Android系统回调方法执行在主线程
         call.enqueue(object : Callback<ResponseBody?> {
             override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>) {
+                val result = response.body()?.string()?.trimIndent()
                 try {
-                    Toast.makeText(Utils.getApp(),response.body()?.string(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
                     System.out.println(response.body()?.string())
+//                    result?.replace("<"+city+" dn=\"day\">","")?.replace("</"+city+">","")
+                    val serializer: Serializer = Persister()
+                    val city = serializer.read(zhuhai::class.java, result)
+                    Log.e("tag","解析的结果： "+city.lists.first())
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
