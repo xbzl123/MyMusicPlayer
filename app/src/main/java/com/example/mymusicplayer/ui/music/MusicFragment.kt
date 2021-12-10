@@ -23,10 +23,6 @@ class MusicFragment : BaseFragment<MusicFragmentBinding,MusicViewModel>() {
         fun newInstance() = MusicFragment()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onResume() {
         super.onResume()
         mDataBinding.message.setOnClickListener {

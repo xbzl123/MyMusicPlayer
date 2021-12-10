@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.mymusicplayer.BaseFragment
 import com.example.mymusicplayer.R
 import com.example.mymusicplayer.databinding.MainFragmentBinding
+import com.example.mymusicplayer.ui.music.MusicFragment
 
 //主页
 class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {

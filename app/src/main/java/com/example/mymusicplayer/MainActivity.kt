@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.blankj.utilcode.util.Utils
+import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.databinding.MainActivityBinding
 import com.example.mymusicplayer.ui.main.MainFragment
 import com.example.mymusicplayer.ui.music.MusicFragment
@@ -22,6 +25,18 @@ class MainActivity : AppCompatActivity() {
         }
         Utils.init(this.application)
         handlePermissions()
+
+        listenFragmentChange()
+    }
+
+    private fun listenFragmentChange() {
+        LiveDataBus.with("changeFragment").observe(this, Observer {
+            if (it?.equals("music") == true){
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, MusicFragment.newInstance())
+                    .commitNow()
+            }
+        })
     }
 
     private fun handlePermissions() {

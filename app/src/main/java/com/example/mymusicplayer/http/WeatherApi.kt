@@ -68,12 +68,12 @@ class City {
 
 }
 
-@Root(strict = false, name = "zhuhai")
-class zhuhai {
+@Root(strict = false, name = "weather_city")
+class WeatherCity {
     @field:Attribute(name = "dn", required = false)
     var dn: String? = null
 
-    @field:ElementList(name = "city", required = false)
+    @field:ElementList(entry = "city", required = false,inline = true)
     lateinit var lists: List<City>
 }
 

@@ -8,11 +8,13 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
 import android.widget.Toast
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.blankj.utilcode.util.Utils
-import com.example.mymusicplayer.http.City
+import com.bugrui.buslib.LiveDataBus
+import com.example.mymusicplayer.R
 import com.example.mymusicplayer.http.WeatherApi
-import com.example.mymusicplayer.http.zhuhai
+import com.example.mymusicplayer.http.WeatherCity
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
 import java.util.*
@@ -36,36 +38,37 @@ class MainViewModel : LifecycleViewModel() {
 
     init {
         val locationManager = Utils.getApp().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-//        val lastKnownLocation: Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000L,10f,object :LocationListener{
             override fun onLocationChanged(location: Location) {
                 val geocoder = Geocoder(Utils.getApp(), Locale.getDefault())
+                //坐标转成位置类
                 val fromLocation = geocoder.getFromLocation(location.latitude, location.longitude,10)
                 val lastLocation = fromLocation.get(0)
+                //拼接成详细的地址
                 val addr = lastLocation.countryName + lastLocation.adminArea + lastLocation.locality + lastLocation.subLocality
+                //值绑定给观察者
                 address.set(addr)
                 val cityName = lastLocation.locality
                 val substring = cityName.substring(0, cityName.length - 1)
+                //汉字字符串转拼音字符串
                 val instance = HanziToPinyin.getInstance()
                 val get = instance?.get(substring)
                 var result = StringBuilder()
-
-                result.let {
+                //拼接拼音字符串
+                result?.let {
                     for (i in 0..get!!.size-1){
                         result.append(get[i].target)
                     }
                 }
 
                 var pinyinName:String = result.toString().toLowerCase()
-                requstWeather(pinyinName)
-               // "http://flash.weather.com.cn/wmaps/xml/aomen.xml"
-                Toast.makeText(Utils.getApp(),addr, Toast.LENGTH_LONG).show()
+                //网络请求目标城市的天气信息
+                requstWeather(pinyinName,lastLocation.subLocality)
             }
         })
-
     }
 
-    private fun requstWeather(city: String) {
+    private fun requstWeather(city: String, subLocality: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://flash.weather.com.cn/wmaps/xml/")
             .build()
@@ -78,12 +81,13 @@ class MainViewModel : LifecycleViewModel() {
             override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>) {
                 val result = response.body()?.string()?.trimIndent()
                 try {
-                    Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
-                    System.out.println(response.body()?.string())
-//                    result?.replace("<"+city+" dn=\"day\">","")?.replace("</"+city+">","")
+//                    Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
+                    result?.replace(city,"weather_city")
+                    //xml格式转成实体类
                     val serializer: Serializer = Persister()
-                    val city = serializer.read(zhuhai::class.java, result)
-                    Log.e("tag","解析的结果： "+city.lists.first())
+                    val city = serializer.read(WeatherCity::class.java, result)
+                    Log.e("tag","解析的结果： "+city.lists.first().centername)
+                    refreshCityWeather(city,subLocality)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -95,7 +99,34 @@ class MainViewModel : LifecycleViewModel() {
         })
     }
 
+    private fun refreshCityWeather(city: WeatherCity, subLocality: String) {
+        val subCity = subLocality.substring(0, subLocality.length - 1)
+        val lists = city.lists
+        var nameList = ""
+        lists.forEach {
+            nameList+=it.cityname
+        }.apply {
+            if(nameList.contains(subCity)){
+                lists.forEach {
+                    if(it.centername?.contains(subCity) == true){
+                        address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
+                                +"，现在的室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
+                    }
+                }
+            }else{
+                lists.forEach {
+                    if(it.centername?.contains("市") == true){
+                        address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
+                                +"，现室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
+                        return
+                    }
+                }
+            }
+        }
+    }
+
     fun test(){
+        LiveDataBus.send("changeFragment","music")
         Toast.makeText(Utils.getApp(),"test", Toast.LENGTH_LONG).show()
     }
 

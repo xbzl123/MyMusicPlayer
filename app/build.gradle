@@ -63,5 +63,7 @@ dependencies {
 
     implementation 'com.blankj:utilcode:1.10.0'
     implementation group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1'
-//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+
+    implementation 'com.github.BugRui:LiveDataBus:1.2.2'
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 }

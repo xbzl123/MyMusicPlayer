@@ -17,7 +17,6 @@ class MusicViewModel : LifecycleViewModel() {
     private val temp = MutableStateFlow("test over!")
     val stateFlow:StateFlow<String> = temp
     fun changeData(content:String){
-//        Toast.makeText(Utils.getApp(),"test",Toast.LENGTH_LONG).show()
         temp.value = content
     }
 }
