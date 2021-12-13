@@ -49,15 +49,15 @@ class MainViewModel : LifecycleViewModel() {
                 //值绑定给观察者
                 address.set(addr)
                 val cityName = lastLocation.locality
-                val substring = cityName.substring(0, cityName.length - 1)
+                val subCity = cityName.substring(0, cityName.length - 1)
                 //汉字字符串转拼音字符串
                 val instance = HanziToPinyin.getInstance()
-                val get = instance?.get(substring)
+                val getPinyin = instance?.get(subCity)
                 var result = StringBuilder()
                 //拼接拼音字符串
                 result?.let {
-                    for (i in 0..get!!.size-1){
-                        result.append(get[i].target)
+                    for (i in 0..getPinyin!!.size-1){
+                        result.append(getPinyin[i].target)
                     }
                 }
 
@@ -103,25 +103,32 @@ class MainViewModel : LifecycleViewModel() {
         val subCity = subLocality.substring(0, subLocality.length - 1)
         val lists = city.lists
         var nameList = ""
-        lists.forEach {
-            nameList+=it.cityname
-        }.apply {
-            if(nameList.contains(subCity)){
-                lists.forEach {
-                    if(it.centername?.contains(subCity) == true){
-                        address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
-                                +"，现在的室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
+        if(lists.size > 1){
+            lists.forEach {
+                nameList+=it.cityname
+            }.apply {
+                //存在区或者镇名符合的天气搜索结果
+                if(nameList.contains(subCity)){
+                    lists.forEach {
+                        if(it.centername?.contains(subCity) == true){
+                            address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
+                                    +"，现在的室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
+                        }
                     }
-                }
-            }else{
-                lists.forEach {
-                    if(it.centername?.contains("市") == true){
-                        address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
-                                +"，现室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
-                        return
+                }else{
+                    //不符合结果就直接使用市的天气
+                    lists.forEach {
+                        if(it.centername?.contains("市") == true){
+                            address.set(address.get()+"\n气温是:"+it.tem2+"`C~"+it.tem1+"`C"
+                                    +"，现室外温度:"+it.temNow+"，天气是:"+it.stateDetailed+",湿度:"+it.humidity)
+                            return
+                        }
                     }
                 }
             }
+        }else if(lists.size == 1){
+            address.set(address.get()+"\n气温是:"+city.lists[0].tem2+"`C~"+city.lists[0].tem1+"`C"
+                    +"，现室外温度:"+city.lists[0].temNow+"，天气是:"+city.lists[0].stateDetailed+",湿度:"+city.lists[0].humidity)
         }
     }
 

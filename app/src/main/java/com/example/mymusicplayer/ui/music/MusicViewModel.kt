@@ -17,6 +17,6 @@ class MusicViewModel : LifecycleViewModel() {
     private val temp = MutableStateFlow("test over!")
     val stateFlow:StateFlow<String> = temp
     fun changeData(content:String){
-        temp.value = content
+//        temp.value = content
     }
 }

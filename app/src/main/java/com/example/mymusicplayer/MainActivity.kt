@@ -42,10 +42,13 @@ class MainActivity : AppCompatActivity() {
     private fun handlePermissions() {
         val registerForActivityResult =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-                if(!it[Manifest.permission.ACCESS_FINE_LOCATION]!!){
+                if(!it[Manifest.permission.ACCESS_FINE_LOCATION]!!
+                    || !it[Manifest.permission.READ_EXTERNAL_STORAGE]!!
+                    || !it[Manifest.permission.WRITE_EXTERNAL_STORAGE]!!){
                     finish()
                 }
             }
-        registerForActivityResult.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
+        registerForActivityResult.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION
+            ,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 }

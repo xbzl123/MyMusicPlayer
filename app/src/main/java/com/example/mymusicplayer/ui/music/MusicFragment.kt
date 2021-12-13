@@ -26,7 +26,7 @@ class MusicFragment : BaseFragment<MusicFragmentBinding,MusicViewModel>() {
     override fun onResume() {
         super.onResume()
         mDataBinding.message.setOnClickListener {
-            mViewModel.changeData("data")
+//            mViewModel.changeData("data")
         }
         GlobalScope.launch (Dispatchers.Main){
             mViewModel.stateFlow.collect {
