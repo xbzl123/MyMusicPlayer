@@ -24,6 +24,33 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="@{viewmodel.nameObserver}"
             />
+        <TableRow
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@{viewmodel.isPlay?@drawable/ic_baseline_play_arrow_24:@drawable/ic_baseline_stop_24}"
+                >
+            </ImageView>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_pause_24"
+                >
+            </ImageView>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+            </Spinner>
+        </TableRow>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
