@@ -36,7 +36,8 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@{viewmodel.isPlay?@drawable/ic_baseline_play_arrow_24:@drawable/ic_baseline_stop_24}"
+                android:src="@{viewmodel.isStop?@drawable/ic_baseline_play_arrow_24:@drawable/ic_baseline_stop_24}"
+                android:onClick="@{()->viewmodel.playMusic()}"
                 >
             </ImageView>
             <ImageView

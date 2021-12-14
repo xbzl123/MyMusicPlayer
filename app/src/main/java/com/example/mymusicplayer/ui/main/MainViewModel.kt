@@ -100,7 +100,7 @@ class MainViewModel : LifecycleViewModel() {
     }
 
     private fun refreshCityWeather(city: WeatherCity, subLocality: String) {
-        val subCity = subLocality.substring(0, subLocality.length - 1)
+        val subCity = subLocality?.substring(0, subLocality.length - 1)
         val lists = city.lists
         var nameList = ""
         if(lists.size > 1){

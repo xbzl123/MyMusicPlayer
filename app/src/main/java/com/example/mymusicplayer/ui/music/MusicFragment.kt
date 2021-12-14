@@ -28,17 +28,14 @@ class MusicFragment : BaseFragment<MusicFragmentBinding,MusicViewModel>() {
     companion object {
         fun newInstance() = MusicFragment()
     }
-
     var musicInfoList = arrayListOf<MusicInfo>()
+
     override fun onResume() {
         super.onResume()
         searchMp3File()
 
         val function: (View) -> Unit = {
-            if(mViewModel.isPlay.get()){
-            playMusic(musicInfoList[0].path)
-            }
-//            mViewModel.changeData("data")
+            mViewModel.changeData("data")
         }
         mDataBinding.message.setOnClickListener(function)
         GlobalScope.launch (Dispatchers.Main){
@@ -66,30 +63,14 @@ class MusicFragment : BaseFragment<MusicFragmentBinding,MusicViewModel>() {
                     ,query.getString(query.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)))
                 musicInfoList.add(musicInfo)
             }
-            Log.d("1111", "ssssize = "+musicInfoList[0].path)
         }
+        mViewModel.musicInfoList = this.musicInfoList
 
-    }
-
-    private fun playMusic(path: String) {
-        val mediaPlayer = MediaPlayer().apply {
-            setAudioStreamType(AudioManager.STREAM_MUSIC)
-            setDataSource(path)
-            //异步监听加载
-            prepareAsync()
-        }
-
-        mediaPlayer.setOnPreparedListener({
-            it.start()
-            mViewModel.isPlay.set(true)
-        })
     }
 
     override fun getContentViewId(): Int {
         return R.layout.music_fragment
     }
-
-
 
     override fun bindViewModel() {
         mDataBinding.viewmodel = mViewModel
