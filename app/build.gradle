@@ -1,8 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'kotlin-kapt'
 }
-
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -38,6 +38,10 @@ android {
     dataBinding{
         enabled = true
     }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -66,4 +70,5 @@ dependencies {
 
     implementation 'com.github.BugRui:LiveDataBus:1.2.2'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+
 }

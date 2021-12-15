@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data >
+        <import type="android.view.View"></import>
         <variable
             name="viewmodel" type="com.example.mymusicplayer.ui.music.MusicViewModel"></variable>
     </data>
@@ -13,7 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.MusicFragment">
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadpic="@{viewmodel.picPath}"
+            />
         <TextView
             android:id="@+id/message"
             android:layout_width="wrap_content"
@@ -36,19 +44,22 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@{viewmodel.isStop?@drawable/ic_baseline_play_arrow_24:@drawable/ic_baseline_stop_24}"
-                android:onClick="@{()->viewmodel.playMusic()}"
+                android:layout_margin="10dp"
+                android:src="@{viewmodel.isStop?@drawable/ic_baseline_play_arrow_24:@drawable/ic_baseline_pause_24}"
+                android:onClick="@{()->viewmodel.playMusic(viewmodel.path)}"
                 >
             </ImageView>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_pause_24"
+                android:layout_margin="10dp"
+                android:src="@drawable/ic_baseline_stop_24"
                 >
             </ImageView>
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 >
             </Spinner>
         </TableRow>
