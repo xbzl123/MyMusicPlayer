@@ -49,7 +49,7 @@ class MusicViewModel : LifecycleViewModel() {
                 isStop.set(false)
                 return
             }
-//            path = musicInfoList.get(0).path
+            this.path = musicInfoList.get(0).path
             mediaPlayer.apply {
                 setAudioStreamType(AudioManager.STREAM_MUSIC)
                 setDataSource(path)
@@ -63,10 +63,7 @@ class MusicViewModel : LifecycleViewModel() {
         }else{
             mediaPlayer.pause()
             isStop.set(true)
-
         }
     }
-
-
 }
 

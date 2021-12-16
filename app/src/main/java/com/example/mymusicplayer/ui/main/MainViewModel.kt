@@ -38,7 +38,7 @@ class MainViewModel : LifecycleViewModel() {
 
     init {
         val locationManager = Utils.getApp().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000L,10f,object :LocationListener{
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,2000L,10f,object :LocationListener{
             override fun onLocationChanged(location: Location) {
                 val geocoder = Geocoder(Utils.getApp(), Locale.getDefault())
                 //坐标转成位置类
@@ -65,7 +65,7 @@ class MainViewModel : LifecycleViewModel() {
                 //网络请求目标城市的天气信息
                 requstWeather(pinyinName,lastLocation.subLocality)
             }
-        })
+        },null)
     }
 
     private fun requstWeather(city: String, subLocality: String) {
