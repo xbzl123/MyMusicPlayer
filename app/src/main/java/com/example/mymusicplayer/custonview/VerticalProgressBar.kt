@@ -6,25 +6,24 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import androidx.customview.widget.ViewDragHelper
+import androidx.recyclerview.widget.ItemTouchHelper
 
 class VerticalProgressBar @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private var NUM: Int = 0
-    val interval = 50f
-    val heigtLength = 200L
+    var NUM: Int = 0
+    var interval = 0f
+    lateinit var moveResult: MoveResult
     val expandWith = 30L
 
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        super.onLayout(changed, left, top, right, bottom)
-    }
     var size_height = 0F;
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val size_with = MeasureSpec.getSize(widthMeasureSpec)
         size_height = MeasureSpec.getSize(heightMeasureSpec).toFloat()
+        interval = size_height/10
         NUM = (size_height/interval).toInt()
-        Log.e("test","size_with = "+size_with+",size_height = "+size_height)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -39,39 +38,53 @@ class VerticalProgressBar @JvmOverloads constructor(
         paintLine.color = Color.BLACK
 
         var paintText = Paint()
-        paintText.textSize = 10f
+        paintText.textSize = 15f
         paintText.color = Color.BLUE
         paintText.textAlign = Paint.Align.CENTER
-        for (i in 1..NUM-1){
+        for (i in 0..NUM-1){
             canvas?.let {
                 it.drawLine(expandWith + 10f,interval * i,expandWith + 15f,interval * i,paintLine)
-                it.drawText(i.toString(),expandWith + 40f,interval * i+3,paintText)
+                it.run {
+                    for (j in 1 .. 9){
+                        this.drawLine(expandWith + 10f,interval * (i +0.1f*j),expandWith + 12f,interval * (i +0.1f*j),paintLine)
+                    }
+                }
+                it.drawText((i).toString(),expandWith + 40f,interval * i+3,paintText)
             }
         }
-//        canvas?.save()
-//        canvas?.translate(0f,200f)
     }
 
-    var Y1 = 0f
-    var Y2 = 0f
+    var beforeY = 0f
+    var moveStart = 0
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         var action = event?.action
-        Log.e("test","event = "+action+",y"+event?.y)
-        when(action ){
+        var y = event?.y!!
+        when(action){
             MotionEvent.ACTION_DOWN->{
+                beforeY = event?.y!!
             }
             MotionEvent.ACTION_MOVE->{
-                Y1 = event?.y!!
-                if(Y1 != 0f){
-                    this.translationY = Y1
-                    invalidate()
+                //计算偏移量
+                var offsetY = y?.minus(beforeY).toInt()
+                Log.e("onTouchEvent","onTouchEvent top = "+(top+offsetY))
+                layout(left,top+offsetY,right,bottom+offsetY)
+                if(moveStart != top+offsetY){
+                    moveResult.onMove((top+offsetY)/(interval))
                 }
+                moveStart = top+offsetY
+
+
             }
             MotionEvent.ACTION_UP->{
-                Y1 = 0f
             }
-
         }
         return true
+    }
+    fun setMoveListener(moveResult: MoveResult){
+        this.moveResult = moveResult
+    }
+
+    interface MoveResult{
+        fun onMove(duration:Float)
     }
 }

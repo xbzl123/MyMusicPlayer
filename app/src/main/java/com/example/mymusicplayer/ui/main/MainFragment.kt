@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultCallback
@@ -33,4 +34,15 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
         return MainViewModel::class.java
     }
 
+    override fun onResume() {
+        super.onResume()
+//        mDataBinding.verticalbar.setOnTouchListener(object :View.OnTouchListener{
+//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+//                if(event?.action == MotionEvent.ACTION_MOVE){
+//                    mDataBinding.verticalbar.translationY = event?.y
+//                }
+//                return true
+//            }
+//        })
+    }
 }
