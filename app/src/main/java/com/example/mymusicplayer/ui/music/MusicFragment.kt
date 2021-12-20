@@ -15,12 +15,11 @@ import com.blankj.utilcode.util.Utils
 import com.example.mymusicplayer.BaseFragment
 import com.example.mymusicplayer.R
 import com.example.mymusicplayer.databinding.MusicFragmentBinding
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.withContext
 
 //音乐页面
 class MusicFragment : BaseFragment<MusicFragmentBinding,MusicViewModel>() {

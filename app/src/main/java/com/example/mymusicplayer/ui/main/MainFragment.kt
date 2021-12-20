@@ -13,6 +13,7 @@ import com.example.mymusicplayer.BaseFragment
 import com.example.mymusicplayer.R
 import com.example.mymusicplayer.databinding.MainFragmentBinding
 import com.example.mymusicplayer.ui.music.MusicFragment
+import java.util.*
 
 //主页
 class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
@@ -44,5 +45,6 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 //                return true
 //            }
 //        })
+        mDataBinding.radarview.startAnimationRatotion()
     }
 }
