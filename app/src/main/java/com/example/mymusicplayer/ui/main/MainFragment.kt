@@ -37,14 +37,7 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 
     override fun onResume() {
         super.onResume()
-//        mDataBinding.verticalbar.setOnTouchListener(object :View.OnTouchListener{
-//            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-//                if(event?.action == MotionEvent.ACTION_MOVE){
-//                    mDataBinding.verticalbar.translationY = event?.y
-//                }
-//                return true
-//            }
-//        })
-        mDataBinding.radarview.startAnimationRatotion()
+
+        mDataBinding.radarview.insertData(intArrayOf(18,2,10,20,16))
     }
 }

@@ -133,8 +133,9 @@ class MainViewModel : LifecycleViewModel() {
     }
 
     fun test(){
-        LiveDataBus.send("changeFragment","music")
-        Toast.makeText(Utils.getApp(),"test", Toast.LENGTH_LONG).show()
+
+//        LiveDataBus.send("changeFragment","music")
+//        Toast.makeText(Utils.getApp(),"test", Toast.LENGTH_LONG).show()
     }
 
 }
