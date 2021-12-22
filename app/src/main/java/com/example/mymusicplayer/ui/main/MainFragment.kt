@@ -37,7 +37,6 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 
     override fun onResume() {
         super.onResume()
-
-        mDataBinding.radarview.insertData(intArrayOf(18,2,10,20,16))
+        mDataBinding.radarview.insertData(intArrayOf(18,2,20,16,5,13))
     }
 }

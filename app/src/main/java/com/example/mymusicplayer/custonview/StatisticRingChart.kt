@@ -13,7 +13,7 @@ class StatisticRingChart @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     var widthSize = 0
-    var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN)
+    var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN,Color.GRAY)
     lateinit var datas:IntArray
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -33,8 +33,7 @@ class StatisticRingChart @JvmOverloads constructor(
             for (i in 0..datas.size-1){
                 var paint = Paint()
                 paint.color = colors[i]
-                endAngle = (datas[i]*360/total).toFloat()
-                Log.e("qqqq","endAngle is "+endAngle+",startAngle = "+startAngle)
+                endAngle = (datas[i].toFloat()*360/total.toFloat())
                 it?.drawArc(rectF,startAngle,endAngle,true,paint)
                 startAngle += endAngle
             }
