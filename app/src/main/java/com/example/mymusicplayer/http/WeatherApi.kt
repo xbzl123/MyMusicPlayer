@@ -1,8 +1,8 @@
 package com.example.mymusicplayer.http
 
+import io.reactivex.Observable
 import okhttp3.ResponseBody
 import org.simpleframework.xml.Attribute
-import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
 import org.simpleframework.xml.Root
 import retrofit2.Call
@@ -78,8 +78,11 @@ class WeatherCity {
 }
 
 interface WeatherApi {
-//    @GET("aomen.xml")
     @HTTP(method = "GET", path = "{city}.xml", hasBody = false)
     fun getCtiyWeather(@Path("city") city:String):Call<ResponseBody>
+
+    @HTTP(method = "GET", path = "{city}.xml", hasBody = false)
+    fun getCtiyWeather1(@Path("city") city:String): Observable<ResponseBody>
 }
+
 

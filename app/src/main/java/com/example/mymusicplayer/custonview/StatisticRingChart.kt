@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 
 class StatisticRingChart @JvmOverloads constructor(
@@ -43,5 +44,15 @@ class StatisticRingChart @JvmOverloads constructor(
     fun insertData(data: IntArray) {
         datas = data
         invalidate()
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val action = event?.action
+        when(action){
+            MotionEvent.ACTION_MOVE->{
+
+            }
+        }
+        return true
     }
 }

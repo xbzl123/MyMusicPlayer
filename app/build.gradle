@@ -60,6 +60,8 @@ dependencies {
     // Android 支持 Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation "com.squareup.retrofit2:converter-gson:2.2.0"
+    implementation "com.squareup.retrofit2:converter-simplexml:2.0.0"
+
 
     // 衔接 Retrofit & RxJava
     // 此处一定要注意使用RxJava2的版本

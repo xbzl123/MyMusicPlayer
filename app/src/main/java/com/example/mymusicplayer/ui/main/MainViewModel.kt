@@ -17,6 +17,10 @@ import com.example.mymusicplayer.http.WeatherApi
 import com.example.mymusicplayer.http.WeatherCity
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 import okhttp3.ResponseBody
 import org.simpleframework.xml.Serializer
@@ -26,6 +30,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import retrofit2.Retrofit
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 
 data class WeatherInfo(var address:LocaleInfo,var tempe:String,var weather:String)
@@ -71,30 +76,25 @@ class MainViewModel : LifecycleViewModel() {
     private fun requstWeather(city: String, subLocality: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl("http://flash.weather.com.cn/wmaps/xml/")
+            .addConverterFactory(SimpleXmlConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         val service: WeatherApi = retrofit.create(WeatherApi::class.java)
 
-        val call: Call<ResponseBody> = service.getCtiyWeather(city)
-        // 用法和OkHttp的call如出一辙,
-        // 不同的是如果是Android系统回调方法执行在主线程
-        call.enqueue(object : Callback<ResponseBody?> {
-            override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>) {
-                val result = response.body()?.string()?.trimIndent()
-                try {
-//                    Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
-                    result?.replace(city,"weather_city")
-                    //xml格式转成实体类
-                    val serializer: Serializer = Persister()
-                    val city = serializer.read(WeatherCity::class.java, result)
-                    Log.e("tag","解析的结果： "+city.lists.first().centername)
-                    refreshCityWeather(city,subLocality)
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody?>?, t: Throwable) {
-                t.printStackTrace()
+        val observable: io.reactivex.Observable<ResponseBody> = service.getCtiyWeather1(city)
+        observable.subscribeOn(Schedulers.io())
+            .subscribe(Consumer {
+            val result = it.string()?.trimIndent()
+            try {
+//              Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
+                result?.replace(city,"weather_city")
+                //xml格式转成实体类
+                val serializer: Serializer = Persister()
+                val city = serializer.read(WeatherCity::class.java, result)
+                Log.e("tag","解析的结果： "+city.lists.first().centername)
+                refreshCityWeather(city,subLocality)
+            } catch (e: IOException) {
+                e.printStackTrace()
             }
         })
     }
