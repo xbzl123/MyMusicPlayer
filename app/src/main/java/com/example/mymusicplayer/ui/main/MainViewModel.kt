@@ -18,16 +18,12 @@ import com.example.mymusicplayer.http.WeatherCity
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import okhttp3.ResponseBody
 import org.simpleframework.xml.Serializer
 import org.simpleframework.xml.core.Persister
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
@@ -86,13 +82,12 @@ class MainViewModel : LifecycleViewModel() {
             .subscribe(Consumer {
             val result = it.string()?.trimIndent()
             try {
-//              Toast.makeText(Utils.getApp(),result, Toast.LENGTH_LONG).show()
                 result?.replace(city,"weather_city")
                 //xml格式转成实体类
-                val serializer: Serializer = Persister()
-                val city = serializer.read(WeatherCity::class.java, result)
-                Log.e("tag","解析的结果： "+city.lists.first().centername)
-                refreshCityWeather(city,subLocality)
+//                val serializer: Serializer = Persister()
+//                val city = serializer.read(WeatherCity::class.java, result)
+//                Log.e("tag","解析的结果： "+city.lists.first().centername)
+//                refreshCityWeather(city,subLocality)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -133,7 +128,6 @@ class MainViewModel : LifecycleViewModel() {
     }
 
     fun test(){
-
 //        LiveDataBus.send("changeFragment","music")
 //        Toast.makeText(Utils.getApp(),"test", Toast.LENGTH_LONG).show()
     }
