@@ -8,12 +8,15 @@ import android.view.MotionEvent
 import android.view.View
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
 
 class StatisticRingChart @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    var changeValue1 = 0f
+    var colorLast = ""
     var dispose: Disposable? = null
     var isRotate = false
     var isRotateOver = false
@@ -23,15 +26,16 @@ class StatisticRingChart @JvmOverloads constructor(
     var colorName = arrayOf("黑","绿","蓝","红","黄","靛","灰")
     var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN,Color.GRAY)
     lateinit var datas:IntArray
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         widthSize = MeasureSpec.getSize(widthMeasureSpec)
     }
 
     var totalRotate = 0f
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.drawFilter
         canvas.let {
             it?.save()
             val rectF = RectF(0f, 0f, widthSize.toFloat(), widthSize.toFloat())
@@ -49,25 +53,20 @@ class StatisticRingChart @JvmOverloads constructor(
                 endAngle = (datas[i].toFloat()*360/total.toFloat())
                 it?.drawArc(rectF,startAngle,endAngle,true,paint)
                 if(ClipBlockList.size < datas.size){
-                    ClipBlockList.add(ClipBlock(colors[i],startAngle,startAngle+endAngle))
+                    ClipBlockList.add(ClipBlock(colors[i],colorName[i],startAngle,startAngle+endAngle))
                 }
                 startAngle += endAngle
                 if(isRotateOver){
-                    var changeValue = totalRotate % 360
-                    Log.e("tag","changeValue: "+changeValue +",totalRotate:"+totalRotate)
-
-                    kotlin.run outside@{
-                        ClipBlockList.map {
-                            it.startAngle = (it.startAngle + changeValue)%360
-                            it.endAngle = (it.endAngle + changeValue)%360
-                            if(it.startAngle<90 && it.endAngle>90){
-                                Log.e("tag1","it: "+it.color)
-                                return@outside
+                    changeValue1 = totalRotate % 360
+                    if("" == colorLast){
+                        var it:ClipBlock = ClipBlockList[i]
+                        var startAngleLast = (it.startAngle + changeValue1)%360
+                        var endAngleLast = (it.endAngle + changeValue1)%360
+                                if(startAngleLast<90 && endAngleLast>90){
+                                        colorLast = it.colorName
+                                }
                             }
-                        }
                     }
-
-                }
             }
 
             it?.restore()
@@ -82,6 +81,13 @@ class StatisticRingChart @JvmOverloads constructor(
             it?.drawPath(path,paint)
             it?.drawLine(widthSize.toFloat()/2,widthSize.toFloat(),widthSize.toFloat()/2,widthSize.toFloat()+50,paint)
 
+            if("" != colorLast){
+                val paintText = Paint()
+                paintText.color = Color.BLACK
+                paintText.strokeWidth = 5f
+                paintText.textSize = 50f
+                it?.drawText(colorLast,widthSize.toFloat()/2-25,widthSize.toFloat()+100,paintText)
+            }
         }
     }
 
@@ -90,14 +96,13 @@ class StatisticRingChart @JvmOverloads constructor(
         invalidate()
     }
 
-
-    var time = 0f
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val action = event?.action
         Log.e("tag","radom： "+Math.random())
 
         when(action){
             MotionEvent.ACTION_DOWN->{
+                colorLast = ""
                 isRotateOver = false
                 val d = 1000 * Math.random().toFloat()
                 isRotate = true
@@ -124,4 +129,4 @@ class StatisticRingChart @JvmOverloads constructor(
     var ClipBlockList = arrayListOf<ClipBlock>()
 }
 
-class ClipBlock(val color: Int,var startAngle:Float,var endAngle:Float)
+class ClipBlock(val color: Int,val colorName:String,var startAngle:Float,var endAngle:Float)
