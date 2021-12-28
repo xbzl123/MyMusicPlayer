@@ -27,6 +27,7 @@ import org.simpleframework.xml.core.Persister
 import java.io.IOException
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import kotlin.collections.ArrayList
 
 
 data class WeatherInfo(var address:LocaleInfo,var tempe:String,var weather:String)
@@ -67,6 +68,19 @@ class MainViewModel : LifecycleViewModel() {
                 requstWeather(pinyinName,lastLocation.subLocality)
             }
         },null)
+
+        getCountriesList()
+    }
+
+    private fun getCountriesList() {
+        val isoCountries = Locale.getISOCountries()
+        val arrayList = ArrayList<Locale>()
+        isoCountries.map {
+            arrayList.add(Locale("",it))
+        }
+        arrayList.map {
+            Log.e("getCountriesList","it :"+it.displayName+",code: "+it.country)
+        }
     }
 
     private fun requstWeather(city: String, subLocality: String) {

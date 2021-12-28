@@ -17,7 +17,7 @@ class StatisticRingChart @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     var changeValue1 = 0f
     var colorLast = ""
-    var dispose: Disposable? = null
+    lateinit var dispose: Disposable
     var isRotate = false
     var isRotateOver = false
     var progress = 0f
@@ -70,6 +70,9 @@ class StatisticRingChart @JvmOverloads constructor(
             }
 
             it?.restore()
+
+
+            //画箭头指针
             val path = Path()
             path.moveTo(widthSize.toFloat()/2-10,widthSize.toFloat()+20)
             path.quadTo(widthSize.toFloat()/2,widthSize.toFloat()-20,widthSize.toFloat()/2+10,widthSize.toFloat()+20)
@@ -81,12 +84,14 @@ class StatisticRingChart @JvmOverloads constructor(
             it?.drawPath(path,paint)
             it?.drawLine(widthSize.toFloat()/2,widthSize.toFloat(),widthSize.toFloat()/2,widthSize.toFloat()+50,paint)
 
+            //写出转动的结果
             if("" != colorLast){
                 val paintText = Paint()
                 paintText.color = Color.BLACK
                 paintText.strokeWidth = 5f
                 paintText.textSize = 50f
                 it?.drawText(colorLast,widthSize.toFloat()/2-25,widthSize.toFloat()+100,paintText)
+                isRotate = false
             }
         }
     }
@@ -98,12 +103,16 @@ class StatisticRingChart @JvmOverloads constructor(
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val action = event?.action
-        Log.e("tag","radom： "+Math.random())
 
+        if(isRotate){
+            return false
+        }
         when(action){
             MotionEvent.ACTION_DOWN->{
                 colorLast = ""
                 isRotateOver = false
+
+                //获得千次以内的随机数。作为转动次数
                 val d = 1000 * Math.random().toFloat()
                 isRotate = true
                 var stopValue = 1.00f
@@ -119,7 +128,12 @@ class StatisticRingChart @JvmOverloads constructor(
                                 isRotateOver = true
                             }
                         invalidate()
-                    }
+                    },{
+                        if(dispose?.isDisposed){
+                            Log.e("tag","Throwable ： "+it.message)
+
+                        }
+                        }
                 )
             }
         }
