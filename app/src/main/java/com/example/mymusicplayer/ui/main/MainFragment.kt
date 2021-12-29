@@ -1,7 +1,9 @@
 package com.example.mymusicplayer.ui.main
 
+import android.content.res.Configuration
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -38,5 +40,9 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
     override fun onResume() {
         super.onResume()
         mDataBinding.radarview.insertData(intArrayOf(18,2,20,16,5,13))
+        val config: Configuration = getResources().getConfiguration()
+
+        val countryCode: Int = config.mcc
+        Log.e("Exception","countryCode :"+countryCode)
     }
 }

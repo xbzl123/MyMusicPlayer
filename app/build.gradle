@@ -35,9 +35,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    dataBinding{
-        enabled = true
-    }
+//    dataBinding{
+//        enabled = true
+//    }
 
     buildFeatures {
         dataBinding = true
@@ -71,5 +71,5 @@ dependencies {
 
     implementation 'com.github.BugRui:LiveDataBus:1.2.2'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.0.0'
 }

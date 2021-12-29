@@ -6,27 +6,26 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.util.Log
-import android.widget.Toast
-import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.blankj.utilcode.util.Utils
-import com.bugrui.buslib.LiveDataBus
-import com.example.mymusicplayer.R
 import com.example.mymusicplayer.http.WeatherApi
 import com.example.mymusicplayer.http.WeatherCity
+import com.example.mymusicplayer.utils.CountryCodeToRegionCodeUtil
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import okhttp3.ResponseBody
-import org.simpleframework.xml.Serializer
-import org.simpleframework.xml.core.Persister
 import java.io.IOException
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 
@@ -67,6 +66,15 @@ class MainViewModel : LifecycleViewModel() {
                 //网络请求目标城市的天气信息
                 requstWeather(pinyinName,lastLocation.subLocality)
             }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            }
+
+            override fun onProviderEnabled(provider: String) {
+            }
+
+            override fun onProviderDisabled(provider: String) {
+            }
         },null)
 
         getCountriesList()
@@ -75,12 +83,54 @@ class MainViewModel : LifecycleViewModel() {
     private fun getCountriesList() {
         val isoCountries = Locale.getISOCountries()
         val arrayList = ArrayList<Locale>()
+
         isoCountries.map {
             arrayList.add(Locale("",it))
         }
         arrayList.map {
-            Log.e("getCountriesList","it :"+it.displayName+",code: "+it.country)
+            val instance = PhoneNumberUtil.getInstance()
+//            val formatNumberToE164 = PhoneNumberUtils.formatNumberToE164("4152620441", "US")
+            Log.e("getCountriesList","formatNumberToE164 :"+ CountryCodeToRegionCodeUtil.getPhonePrefixByCountry(it.country) +", name ="+it.displayName+",code = "+it.country)
+            val phonePrefixCode =
+                CountryCodeToRegionCodeUtil.getPhonePrefixByCountry(it.country)
+            CountryPhones(it.displayName,it.displayName,phonePrefixCode)
+        }.filter {
+            !"".equals(it.phoneNumber)
+        }.apply {
+            this.sortedWith(object :Comparator<CountryPhones> {
+                override fun compare(o1: CountryPhones?, o2: CountryPhones?): Int {
+                    if (o2?.enName.equals("#")) {
+                        return -1;
+                    } else if (o1?.enName.equals("#")) {
+                        return 1;
+                    } else {
+                        if (o2 != null || o1 !== null) {
+                            return o1!!.enName.compareTo(o2!!.enName)
+                        }
+                    }
+                    return 0
+                }
+            }).map {
+                Log.e("getCountriesList","name ="+it.country+",code = "+it.phoneNumber)
+            }
         }
+
+//        try {
+//            val systemProperties = Class.forName("android.os.SystemProperties")
+//            val get: Method = systemProperties.getMethod("get", String::class.java)
+//
+//
+//            // get homeOperator that contain MCC + MNC
+//            val homeOperator = get.invoke(
+//                systemProperties,
+//                "gsm.current.phone-type"
+//            ) as String
+//
+//            // first 3 chars (MCC) from homeOperator represents the country code
+//            val mcc = homeOperator
+//        }catch (e:Exception){
+//            Log.e("Exception","it :"+e.message)
+//        }
     }
 
     private fun requstWeather(city: String, subLocality: String) {
@@ -147,3 +197,5 @@ class MainViewModel : LifecycleViewModel() {
     }
 
 }
+
+data class CountryPhones(val country: String,val enName: String, val phoneNumber:String)
