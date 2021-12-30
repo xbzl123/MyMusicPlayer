@@ -45,7 +45,7 @@
             >
         </com.example.mymusicplayer.custonview.VerticalContainer>
 
-        <com.example.mymusicplayer.custonview.StatisticRingChart
+        <com.example.mymusicplayer.custonview.StatisticFanChartChart
             android:id="@+id/radarview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-        </com.example.mymusicplayer.custonview.StatisticRingChart>
+        </com.example.mymusicplayer.custonview.StatisticFanChartChart>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

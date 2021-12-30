@@ -8,13 +8,13 @@ import android.view.MotionEvent
 import android.view.View
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
-import java.util.ArrayList
 import java.util.concurrent.TimeUnit
 
 
 class StatisticRingChart @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    lateinit var region: Region
     var changeValue1 = 0f
     var colorLast = ""
     lateinit var dispose: Disposable
@@ -104,9 +104,19 @@ class StatisticRingChart @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val action = event?.action
 
+        region = Region()
+        val path = Path()
+        path.addCircle(widthSize.toFloat()/2,widthSize.toFloat()/2,widthSize.toFloat()/2,Path.Direction.CW)
+        region.setPath(path,Region(0,0,widthSize,widthSize))
+
+        Log.e("tag","region ： "+region.contains(event!!.x.toInt(),event!!.y.toInt()))
+        if(!region.contains(event!!.x.toInt(),event!!.y.toInt())){
+            return false
+        }
         if(isRotate){
             return false
         }
+
         when(action){
             MotionEvent.ACTION_DOWN->{
                 colorLast = ""
@@ -133,7 +143,7 @@ class StatisticRingChart @JvmOverloads constructor(
                             Log.e("tag","Throwable ： "+it.message)
 
                         }
-                        }
+                    }
                 )
             }
         }
@@ -143,4 +153,4 @@ class StatisticRingChart @JvmOverloads constructor(
     var ClipBlockList = arrayListOf<ClipBlock>()
 }
 
-class ClipBlock(val color: Int,val colorName:String,var startAngle:Float,var endAngle:Float)
+data class ClipBlock(val color: Int,val colorName:String,var startAngle:Float,var endAngle:Float)
