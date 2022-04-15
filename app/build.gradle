@@ -2,13 +2,14 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.example.kotlinapplication"
+        applicationId "com.example.mymusicplayer"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -61,7 +62,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation "com.squareup.retrofit2:converter-gson:2.2.0"
     implementation "com.squareup.retrofit2:converter-simplexml:2.0.0"
-
+    implementation 'com.guolindev.permissionx:permissionx:1.6.1'
 
     // 衔接 Retrofit & RxJava
     // 此处一定要注意使用RxJava2的版本
@@ -69,6 +70,15 @@ dependencies {
 
     implementation 'com.blankj:utilcode:1.10.0'
 
+
+    // Import the Firebase BoM (see: https://firebase.google.com/docs/android/learn-more#bom)
+    implementation platform('com.google.firebase:firebase-bom:28.3.0')
+
+    // Firebase Analytics (Java)
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Firebase Analytics (Kotlin)
+    implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.github.BugRui:LiveDataBus:1.2.2'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.0.0'

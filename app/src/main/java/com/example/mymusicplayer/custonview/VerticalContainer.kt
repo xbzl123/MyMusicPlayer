@@ -6,11 +6,13 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.widget.LinearLayout
 
 class VerticalContainer @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
+    var beforeY: Float = 0f
     var heightSize: Float = 0f
     var moveduration = 0.0f
     var verticalProgressBar:VerticalProgressBar
@@ -41,4 +43,17 @@ class VerticalContainer @JvmOverloads constructor(
         }
     }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        val action = event?.action
+        when(action){
+            MotionEvent.ACTION_DOWN->{
+                beforeY = event?.y!!
+            }
+            MotionEvent.ACTION_MOVE->{
+                var offsetY = y?.minus(beforeY).toInt()
+                verticalProgressBar.scrollTo(0,offsetY)
+            }
+        }
+        return true
+    }
 }

@@ -6,16 +6,22 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.util.Log
 import androidx.databinding.ObservableField
+import com.blankj.utilcode.util.DeviceUtils
 import com.blankj.utilcode.util.Utils
+import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.http.WeatherApi
 import com.example.mymusicplayer.http.WeatherCity
 import com.example.mymusicplayer.utils.CountryCodeToRegionCodeUtil
 import com.example.mymusicplayer.utils.HanziToPinyin
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import io.reactivex.functions.Consumer
@@ -90,10 +96,10 @@ class MainViewModel : LifecycleViewModel() {
         arrayList.map {
             val instance = PhoneNumberUtil.getInstance()
 //            val formatNumberToE164 = PhoneNumberUtils.formatNumberToE164("4152620441", "US")
-            Log.e("getCountriesList","formatNumberToE164 :"+ CountryCodeToRegionCodeUtil.getPhonePrefixByCountry(it.country) +", name ="+it.displayName+",code = "+it.country)
+//            Log.e("getCountriesList","isO3Country:"+it.isO3Country+",formatNumberToE164 :"+ CountryCodeToRegionCodeUtil.getPhonePrefixByCountry(it.country) +", name ="+it.displayName+",code = "+it.country)
             val phonePrefixCode =
                 CountryCodeToRegionCodeUtil.getPhonePrefixByCountry(it.country)
-            CountryPhones(it.displayName,it.displayName,phonePrefixCode)
+            CountryPhones(it.country,it.displayName,phonePrefixCode)
         }.filter {
             !"".equals(it.phoneNumber)
         }.apply {
@@ -111,15 +117,15 @@ class MainViewModel : LifecycleViewModel() {
                     return 0
                 }
             }).map {
-                Log.e("getCountriesList","name ="+it.country+",code = "+it.phoneNumber)
+                Log.e("getCountriesList","name ="+it.country+",enName ="+it.enName+",code = "+it.phoneNumber)
             }
         }
-
+        val toString = UUID.randomUUID().toString()
+        val wifiManager = Utils.getApp().getApplicationContext().getSystemService(Context.WIFI_SERVICE) as WifiManager
+//        Log.e("getCountriesList","toString ="+ DeviceUtils.getMacAddress());
 //        try {
 //            val systemProperties = Class.forName("android.os.SystemProperties")
 //            val get: Method = systemProperties.getMethod("get", String::class.java)
-//
-//
 //            // get homeOperator that contain MCC + MNC
 //            val homeOperator = get.invoke(
 //                systemProperties,
@@ -192,7 +198,7 @@ class MainViewModel : LifecycleViewModel() {
     }
 
     fun test(){
-//        LiveDataBus.send("changeFragment","music")
+        LiveDataBus.send("changeFragment","music")
 //        Toast.makeText(Utils.getApp(),"test", Toast.LENGTH_LONG).show()
     }
 

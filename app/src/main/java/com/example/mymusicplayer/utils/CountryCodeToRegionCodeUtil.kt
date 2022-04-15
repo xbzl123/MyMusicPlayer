@@ -505,16 +505,13 @@ class CountryCodeToRegionCodeUtil {
             listWithRegionCode.add("UY")
             countryCodeToRegionCodeMap[598] = listWithRegionCode
 
-            listWithRegionCode = ArrayList(1)
-            listWithRegionCode.add("CW")
-            countryCodeToRegionCodeMap[5999] = listWithRegionCode
-
             listWithRegionCode = ArrayList(3)
             listWithRegionCode.add("AN")
             listWithRegionCode.add("BQ")
             listWithRegionCode.add("SX")
             countryCodeToRegionCodeMap[599] = listWithRegionCode
-            listWithRegionCode = ArrayList(1)
+            listWithRegionCode = ArrayList(2)
+            listWithRegionCode.add("CW")
             listWithRegionCode.add("TL")
             countryCodeToRegionCodeMap[670] = listWithRegionCode
             listWithRegionCode = ArrayList(1)

@@ -1,10 +1,12 @@
 package com.example.mymusicplayer.ui.music
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Environment
+import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
@@ -14,7 +16,12 @@ import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.blankj.utilcode.util.Utils
+import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.io.File
@@ -30,7 +37,8 @@ class MusicViewModel : LifecycleViewModel() {
 
     var nameObserver: ObservableField<String> = ObservableField("test")
     var isStop:ObservableBoolean = ObservableBoolean(true)
-    var path = ""
+    var pathObserver: ObservableField<String> = ObservableField("")
+
     @RequiresApi(Build.VERSION_CODES.R)
     var picPath: ObservableField<String> = ObservableField(Environment.getExternalStorageDirectory().absolutePath+"/test1.jpg")
 
@@ -40,26 +48,34 @@ class MusicViewModel : LifecycleViewModel() {
     val stateFlow:StateFlow<String> = temp
     fun changeData(content:String){
         temp.value = content
+        LiveDataBus.send("changeFragment","main")
+
     }
     var mediaPlayer:MediaPlayer =  MediaPlayer()
     fun playMusic(path: String){
-        if (!mediaPlayer.isPlaying){
+        if (isStop.get()){
             if(!path.equals("")){
                 mediaPlayer.start()
+                Firebase.analytics.logEvent("playMusic"){
+                    param("play","start")
+                }
                 isStop.set(false)
                 return
+            }else{
+                pathObserver.set(musicInfoList[0].path)
+                if(File(pathObserver.get()).exists()){
+                    mediaPlayer.apply {
+                        setAudioStreamType(AudioManager.STREAM_MUSIC)
+                        setDataSource(pathObserver.get())
+                        //异步监听加载
+                        prepareAsync()
+                    }
+                }
             }
-            this.path = musicInfoList.get(0).path
-            mediaPlayer.apply {
-                setAudioStreamType(AudioManager.STREAM_MUSIC)
-                setDataSource(path)
-                //异步监听加载
-                prepareAsync()
-            }
-            mediaPlayer.setOnPreparedListener({
+            mediaPlayer.setOnPreparedListener{
                 mediaPlayer.start()
                 isStop.set(false)
-            })
+            }
         }else{
             mediaPlayer.pause()
             isStop.set(true)

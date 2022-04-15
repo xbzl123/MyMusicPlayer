@@ -1,21 +1,12 @@
 package com.example.mymusicplayer.ui.main
 
-import android.content.res.Configuration
-import androidx.lifecycle.ViewModelProvider
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.mymusicplayer.BaseFragment
 import com.example.mymusicplayer.R
 import com.example.mymusicplayer.databinding.MainFragmentBinding
-import com.example.mymusicplayer.ui.music.MusicFragment
-import java.util.*
 
 //主页
 class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
@@ -31,6 +22,8 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 
     override fun bindViewModel() {
         mDataBinding.viewmodel = mViewModel
+//        openZipDocument?.launch(null)
+
     }
 
     override fun getViewModelClass(): Class<MainViewModel> {
@@ -39,10 +32,16 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        mDataBinding.radarview.insertData(intArrayOf(18,2,20,16,5,13))
-        val config: Configuration = getResources().getConfiguration()
+        val bundle = Bundle()
+        bundle.putString("tag","MainFragment")
+        firebaseAnalytics.logEvent("currFragment", bundle)
+//        mDataBinding.radarview.setSpeedx2()
+//        mDataBinding.radarview.startAnimationScan()
 
-        val countryCode: Int = config.mcc
-        Log.e("Exception","countryCode :"+countryCode)
+//        mDataBinding.radarview.insertData(intArrayOf(18,2,20,16,5,13,30))
     }
+
+    private val openZipDocument : ActivityResultLauncher<Uri>? = registerForActivityResult(
+        ActivityResultContracts.OpenDocumentTree()){}
+
 }

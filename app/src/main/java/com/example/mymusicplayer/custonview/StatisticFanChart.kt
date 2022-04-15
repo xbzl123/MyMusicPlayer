@@ -14,10 +14,9 @@ class StatisticFanChartChart @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     lateinit var region: Region
-    lateinit var dispose: Disposable
     var widthSize = 0
-    var colorName = arrayOf("黑","绿","蓝","红","黄","靛","灰")
-    var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN,Color.GRAY)
+    var colorName = arrayOf("黑","绿","蓝","红","黄","靛","灰","白")
+    var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN,Color.GRAY,Color.WHITE)
     lateinit var datas:IntArray
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -62,17 +61,14 @@ class StatisticFanChartChart @JvmOverloads constructor(
         path.addCircle(widthSize.toFloat()/2,widthSize.toFloat()/2,widthSize.toFloat()/2,Path.Direction.CW)
         region.setPath(path,Region(0,0,widthSize,widthSize))
 
-        Log.e("tag","region ： "+region.contains(event!!.x.toInt(),event!!.y.toInt()))
         if(!region.contains(event!!.x.toInt(),event!!.y.toInt())){
             return false
         }
 
         when(action){
             MotionEvent.ACTION_DOWN->{
-                val angleByXY = (getAngleByXY(event!!.x, event!!.y))
+                val angleByXY = getAngleByXY(event!!.x, event!!.y)
                 ClipBlockList.map {
-                    Log.e("tag","region ： "+it.startAngle+",endAngle = "+it.endAngle+",angleByXY = "+angleByXY)
-
                     if(it.startAngle<angleByXY && it.endAngle > angleByXY){
                         Toast.makeText(Utils.getApp(),"你的选择是:"+it.colorName,Toast.LENGTH_LONG).show()
                     }
@@ -94,7 +90,6 @@ class StatisticFanChartChart @JvmOverloads constructor(
                 return Math.atan(Math.abs(x-widthSize.toFloat()/2).toDouble().div(Math.abs(y-widthSize.toFloat()/2))).times(180f.div(Math.PI)).toFloat()+90f
             }else{
                 return Math.atan(Math.abs(y-widthSize.toFloat()/2).toDouble().div(Math.abs(x-widthSize.toFloat()/2))).times(180f.div(Math.PI)).toFloat()+180f
-
             }
         }
     }
