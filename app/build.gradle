@@ -3,7 +3,11 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    // Apply the Crashlytics Gradle plugin
+    id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
+//apply plugin: 'com.hujiang.android-aspectjx'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -14,6 +18,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
@@ -30,8 +35,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility "1.8"
+        targetCompatibility "1.8"
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -71,15 +76,21 @@ dependencies {
     implementation 'com.blankj:utilcode:1.10.0'
 
 
-    // Import the Firebase BoM (see: https://firebase.google.com/docs/android/learn-more#bom)
-    implementation platform('com.google.firebase:firebase-bom:28.3.0')
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:29.3.1')
 
-    // Firebase Analytics (Java)
-    implementation 'com.google.firebase:firebase-analytics'
-
-    // Firebase Analytics (Kotlin)
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-perf-ktx'
+
     implementation 'com.github.BugRui:LiveDataBus:1.2.2'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.0.0'
+
+    implementation 'org.aspectj:aspectjrt:1.9.5'
+
 }

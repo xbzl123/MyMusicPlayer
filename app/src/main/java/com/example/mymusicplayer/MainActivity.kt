@@ -1,11 +1,8 @@
 package com.example.mymusicplayer
 
 import android.Manifest
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,9 +11,6 @@ import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.databinding.MainActivityBinding
 import com.example.mymusicplayer.ui.main.MainFragment
 import com.example.mymusicplayer.ui.music.MusicFragment
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding:MainActivityBinding
@@ -32,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         Utils.init(this.application)
         handlePermissions()
         listenFragmentChange()
+
     }
 
     private fun listenFragmentChange() {
@@ -63,8 +58,4 @@ class MainActivity : AppCompatActivity() {
             ,Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
-    override fun onResume() {
-        super.onResume()
-
-    }
 }

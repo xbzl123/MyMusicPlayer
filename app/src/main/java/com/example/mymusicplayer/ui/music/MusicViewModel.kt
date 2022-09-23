@@ -1,26 +1,23 @@
 package com.example.mymusicplayer.ui.music
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.Environment
-import android.provider.Settings
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.databinding.BindingAdapter
-import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
-import com.blankj.utilcode.util.Utils
 import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.viewmodel.LifecycleViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,6 +31,7 @@ fun loadMusicAlbumPic(view:ImageView,path: String){
 }
 
 class MusicViewModel : LifecycleViewModel() {
+    lateinit var nullPointer:String
 
     var nameObserver: ObservableField<String> = ObservableField("test")
     var isStop:ObservableBoolean = ObservableBoolean(true)
@@ -80,6 +78,16 @@ class MusicViewModel : LifecycleViewModel() {
             mediaPlayer.pause()
             isStop.set(true)
         }
+    }
+    fun stopMusic(){
+        Log.e("setCrashlytics","open success")
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(true)
+
+    }
+
+    fun selectMusicList(){
+        var temp = ""
+        temp[1]
     }
 }
 
