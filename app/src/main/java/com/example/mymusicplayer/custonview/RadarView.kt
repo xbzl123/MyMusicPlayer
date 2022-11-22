@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import androidx.databinding.Observable
 import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class RadarView @JvmOverloads constructor(
@@ -49,7 +50,8 @@ class RadarView @JvmOverloads constructor(
     }
 
     fun startAnimationScan(){
-        io.reactivex.Observable.interval(0,50/speed,TimeUnit.MILLISECONDS).subscribe(
+        io.reactivex.Observable.interval(0,50/speed,TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io()).subscribe(
             {
                 startAngle = it*3.6f
                 invalidate()

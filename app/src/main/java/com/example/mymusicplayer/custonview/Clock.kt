@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class Clock @JvmOverloads constructor(
@@ -15,6 +16,7 @@ class Clock @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     var size: Int = 0
+    val padding = 15f
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -25,23 +27,24 @@ class Clock @JvmOverloads constructor(
         super.onDraw(canvas)
         var paintBg = Paint()
         paintBg.color = Color.BLACK
-        paintBg.strokeWidth = 3f
+        paintBg.strokeWidth = (size/400).toFloat()
         paintBg.style = Paint.Style.STROKE
-        canvas?.drawCircle((size/2).toFloat(),(size/2).toFloat(),(size/2).toFloat(),paintBg)
+        canvas?.drawCircle((size/2).toFloat(),(size/2).toFloat(),(size/2).toFloat() - padding,paintBg)
 
         for (i in 0..60){
+
             canvas?.save()
             Log.e("onDraw","rotate  i = "+i)
             canvas?.rotate(6f*i,(size/2).toFloat(),(size/2).toFloat())
             var temp:Float
             if(i > 0 && i%5==0){
-                temp = 20f
-                paintBg.textSize = 40f
-                canvas?.drawText((i/5).toString(),(size/2).toFloat()-20,(size/15).toFloat(),paintBg)
+                temp = 20f + padding
+                paintBg.textSize = (size/25).toFloat()
+                canvas?.drawText((i/5).toString(),(size/2 - size/50).toFloat(),(size/15).toFloat()+padding,paintBg)
             }else{
-                temp = 10f
+                temp = 10f + padding
             }
-            canvas?.drawLine((size/2).toFloat(),0f, (size/2).toFloat(), temp,paintBg)
+            canvas?.drawLine((size/2).toFloat(),padding, (size/2).toFloat(), temp,paintBg)
             canvas?.restore()
         }
 
@@ -64,13 +67,30 @@ class Clock @JvmOverloads constructor(
         canvas?.drawLine((size/2).toFloat(),(size*0.25).toFloat(), (size/2).toFloat(), (size/2).toFloat(),paintM)
         canvas?.restore()
 
+        val min = progress / 60
+        val sec = progress % 60
+        var minValue = ""
+        var secValue = ""
+
+        minValue = if (min < 10){
+            "0$min"
+        }else {
+            min.toString()
+        }
+        secValue = if (sec < 10){
+            "0$sec"
+        }else {
+            sec.toString()
+        }
+        val timeValue = "$minValue:$secValue"
+        canvas?.drawText(timeValue,(size/2.2).toFloat(),(size + size/15).toFloat(),paintBg)
+
     }
     fun startAnimationRatotion() {
-        Observable.interval(0, 100, TimeUnit.MILLISECONDS).subscribe(
-            {
+        Observable.interval(0, 1000, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io()).subscribe {
                 progress++
                 invalidate()
             }
-        )
     }
 }

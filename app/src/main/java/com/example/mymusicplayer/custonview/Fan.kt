@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class Fan @JvmOverloads constructor(
@@ -27,12 +28,11 @@ class Fan @JvmOverloads constructor(
         canvas?.drawArc(0f,0f, (size/2).toFloat(), (size/2).toFloat(),0f,progress.toFloat(),true,paint)
     }
     fun startAnimationRatotion() {
-        Observable.interval(0, 100, TimeUnit.MILLISECONDS).subscribe(
-            {
-                if (progress > 300) return@subscribe
-                progress = (it*3.6f).toInt()
+        Observable.interval(0, 100, TimeUnit.MILLISECONDS)
+            .subscribeOn(Schedulers.io()).subscribe {
+                if (progress > 360) return@subscribe
+                progress = (it * 3.6f).toInt()
                 invalidate()
             }
-        )
     }
 }

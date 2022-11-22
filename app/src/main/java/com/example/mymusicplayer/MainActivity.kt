@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import com.blankj.utilcode.util.Utils
 import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.databinding.MainActivityBinding
+import com.example.mymusicplayer.ui.custom.CustomViewFragment
 import com.example.mymusicplayer.ui.main.MainFragment
 import com.example.mymusicplayer.ui.music.MusicFragment
 
@@ -34,6 +35,10 @@ class MainActivity : AppCompatActivity() {
             if (it?.equals("music") == true){
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.container, MusicFragment.newInstance())
+                    .commitNow()
+            }else if (it?.equals("custom") == true){
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, CustomViewFragment.newInstance())
                     .commitNow()
             }else{
                 supportFragmentManager.beginTransaction()

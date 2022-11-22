@@ -25,8 +25,6 @@ import java.lang.Exception
 import java.net.InetAddress
 import java.net.Socket
 import android.widget.Toast
-import com.blankj.utilcode.util.FileUtils
-import com.example.mymusicplayer.utils.FileReader
 import java.net.DatagramPacket
 import java.net.DatagramSocket
 
@@ -50,7 +48,6 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
 //        openZipDocument?.launch(null)
 //        scanWifi()
 
-
         val stringArray = resources.getStringArray(R.array.china_weather_city_map_list)
 
         Log.e("TEST","RESULT = "+stringArray)
@@ -60,48 +57,48 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
         }.start()
     }
 
-    val theSocket: DatagramSocket? = DatagramSocket(8888)
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    fun sendBroadCastToCenter() {
-        try {
-            val server = InetAddress.getByName("255.255.255.255")
-            val data = "Hello"
-            val theOutput = DatagramPacket(data.toByteArray(), data.length, server, 8888)
-            /*这一句就是发送广播了，其实255就代表所有的该网段的IP地址，是由路由器完成的工作*/
+//    val theSocket: DatagramSocket? = DatagramSocket(8888)
+//
+//    @RequiresApi(Build.VERSION_CODES.M)
+//    fun sendBroadCastToCenter() {
+//        try {
+//            val server = InetAddress.getByName("255.255.255.255")
+//            val data = "Hello"
+//            val theOutput = DatagramPacket(data.toByteArray(), data.length, server, 8888)
+//            /*这一句就是发送广播了，其实255就代表所有的该网段的IP地址，是由路由器完成的工作*/
+////            while (true){
+//                theSocket?.send(theOutput)
+//
+//                Log.e("sender","sendBroadCastToCenter = ")
+////            }
+//
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        } finally {
+//            if (theSocket != null) theSocket.close()
+//        }
+//    }
+//
+//    fun recevicerBrocastToCenter(){
+//        Thread{
+//            val ackBuf = ByteArray(1024)
+////            val address = InetAddress.getByName("255.255.255.255")
+////            val ackPacket = DatagramPacket(ackBuf, ackBuf.size, address, 8888)
+//        val packet = DatagramPacket(ackBuf, ackBuf.size)
+//
 //            while (true){
-                theSocket?.send(theOutput)
-
-                Log.e("sender","sendBroadCastToCenter = ")
-//            }
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } finally {
-            if (theSocket != null) theSocket.close()
-        }
-    }
-
-    fun recevicerBrocastToCenter(){
-        Thread{
-            val ackBuf = ByteArray(1024)
-//            val address = InetAddress.getByName("255.255.255.255")
-//            val ackPacket = DatagramPacket(ackBuf, ackBuf.size, address, 8888)
-        val packet = DatagramPacket(ackBuf, ackBuf.size)
-
-            while (true){
-                try {
-                        theSocket?.receive(packet)
-                    val resContent = String(packet.data, 0, packet.length)
-                    val repsoneIp = packet.address.hostAddress
-                    Log.e("recevicer","resContent = "+resContent)
-                    Log.e("recevicer","repsoneIp = "+repsoneIp)
-                }catch (e:IOException){
-                    e.printStackTrace()
-                }
-        }
-        }.start()
-    }
+//                try {
+//                        theSocket?.receive(packet)
+//                    val resContent = String(packet.data, 0, packet.length)
+//                    val repsoneIp = packet.address.hostAddress
+//                    Log.e("recevicer","resContent = "+resContent)
+//                    Log.e("recevicer","repsoneIp = "+repsoneIp)
+//                }catch (e:IOException){
+//                    e.printStackTrace()
+//                }
+//        }
+//        }.start()
+//    }
 
 
 
@@ -250,11 +247,8 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
         val bundle = Bundle()
         bundle.putString("tag","MainFragment")
         firebaseAnalytics.logEvent("currFragment", bundle)
-        recevicerBrocastToCenter()
-//        mDataBinding.radarview.setSpeedx2()
-//        mDataBinding.radarview.startAnimationScan()
+//        recevicerBrocastToCenter()
 
-//        mDataBinding.radarview.insertData(intArrayOf(18,2,20,16,5,13,30))
     }
 
     private lateinit var wifiScanReceiver: BroadcastReceiver

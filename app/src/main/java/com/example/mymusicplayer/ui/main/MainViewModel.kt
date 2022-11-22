@@ -11,6 +11,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.viewModelScope
+import com.blankj.utilcode.util.RegexUtils
+import com.blankj.utilcode.util.StringUtils
 import com.blankj.utilcode.util.Utils
 import com.bugrui.buslib.LiveDataBus
 import com.example.mymusicplayer.http.WeatherApi
@@ -152,6 +154,9 @@ class MainViewModel : LifecycleViewModel() {
         //http://m.weather.com.cn/mweather/101280701.shtml 里面有更多内容
         val url = "http://www.weather.com.cn/data/sk/"
         val readTxt = FileReader.readTxt(Utils.getApp())
+        if (!RegexUtils.isZh(subLocality)){
+            return
+        }
         val code = readTxt.filter { subLocality.contains(it.name) }[0].code
         viewModelScope.launch {
             withContext(Dispatchers.IO){
@@ -247,6 +252,10 @@ class MainViewModel : LifecycleViewModel() {
         LiveDataBus.send("changeFragment","music")
 //        val text:String = result.successMsg
 //        Toast.makeText(Utils.getApp(),text, Toast.LENGTH_LONG).show()
+    }
+
+    fun toCustomView(){
+        LiveDataBus.send("changeFragment","custom")
     }
 
 }

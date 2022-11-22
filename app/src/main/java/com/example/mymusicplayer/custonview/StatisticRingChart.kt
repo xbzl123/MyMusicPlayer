@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
@@ -127,7 +128,7 @@ class StatisticRingChart @JvmOverloads constructor(
                 isRotate = true
                 var stopValue = 1.00f
                 Observable.interval(0, 20, TimeUnit.MILLISECONDS)
-                    .doOnSubscribe {
+                    .subscribeOn(Schedulers.io()).doOnSubscribe {
                        dispose =  it
                     }.subscribe(
                     {//转动缓慢减速
