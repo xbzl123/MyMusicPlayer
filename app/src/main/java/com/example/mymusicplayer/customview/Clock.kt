@@ -1,4 +1,4 @@
-package com.example.mymusicplayer.custonview
+package com.example.mymusicplayer.customview
 
 import android.content.Context
 import android.graphics.Canvas

@@ -1,12 +1,9 @@
-package com.example.mymusicplayer.custonview
+package com.example.mymusicplayer.customview
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import androidx.databinding.Observable
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 

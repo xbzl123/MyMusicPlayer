@@ -18,29 +18,29 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
-            <com.example.mymusicplayer.custonview.RadarView
+            <com.example.mymusicplayer.customview.RadarView
                 android:id="@+id/radarview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:visibility="gone">
 
-            </com.example.mymusicplayer.custonview.RadarView>
+            </com.example.mymusicplayer.customview.RadarView>
 
-            <com.example.mymusicplayer.custonview.Clock
+            <com.example.mymusicplayer.customview.Clock
                 android:id="@+id/clock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </com.example.mymusicplayer.custonview.Clock>
+            </com.example.mymusicplayer.customview.Clock>
 
-            <com.example.mymusicplayer.custonview.Fan
+            <com.example.mymusicplayer.customview.Fan
                 android:id="@+id/fan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:visibility="gone">
-            </com.example.mymusicplayer.custonview.Fan>
+            </com.example.mymusicplayer.customview.Fan>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -50,20 +50,20 @@
             android:layout_weight="1"
             android:visibility="gone"
             android:orientation="horizontal">
-            <com.example.mymusicplayer.custonview.StatisticRingChart
+            <com.example.mymusicplayer.customview.StatisticRingChart
                 android:id="@+id/statistfan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-            </com.example.mymusicplayer.custonview.StatisticRingChart>
+            </com.example.mymusicplayer.customview.StatisticRingChart>
 
-            <com.example.mymusicplayer.custonview.WifiScan
+            <com.example.mymusicplayer.customview.WifiScan
                 android:id="@+id/wifiscan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
-            </com.example.mymusicplayer.custonview.WifiScan>
+            </com.example.mymusicplayer.customview.WifiScan>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 

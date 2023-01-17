@@ -1,14 +1,12 @@
-package com.example.mymusicplayer.custonview
+package com.example.mymusicplayer.customview
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.blankj.utilcode.util.Utils
-import io.reactivex.disposables.Disposable
 
 class StatisticFanChartChart @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

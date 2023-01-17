@@ -46,7 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:onClick="@{()->viewmodel.toCustomView()}" />
 
-        <com.example.mymusicplayer.custonview.VerticalContainer
+        <com.example.mymusicplayer.customview.VerticalContainer
             android:id="@+id/verticalbar"
             android:layout_width="100dp"
             android:layout_height="400dp"
@@ -55,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             >
-        </com.example.mymusicplayer.custonview.VerticalContainer>
+        </com.example.mymusicplayer.customview.VerticalContainer>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
