@@ -1,0 +1,32 @@
+apply plugin: 'groovy'
+apply plugin: 'maven'
+//plugins {
+//    id 'groovy'
+//}
+
+dependencies {
+    //gradle sdk
+    implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+
+    implementation 'com.android.tools.build:gradle:3.1.3'
+    implementation group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+
+//本地的Maven地址设置为D:/repos
+group='com.module.asm.tools'
+version='1.0.0'
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repos'))
+        }
+    }
+}

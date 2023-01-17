@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.get
 import com.example.mymusicplayer.R
 import com.example.mymusicplayer.databinding.CustomViewFragmentBinding
 
@@ -30,6 +31,7 @@ class CustomViewFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(CustomViewViewModel::class.java)
+        binding.model = viewModel
         // TODO: Use the ViewModel
     }
 
@@ -37,11 +39,14 @@ class CustomViewFragment : Fragment() {
         super.onResume()
 //        binding.radarview.setSpeedx2()
 //        binding.radarview.startAnimationScan()
-        binding.clock.startAnimationRatotion()
 //        binding.fan.startAnimationRatotion()
-        binding.statistfan.insertData(intArrayOf(18,2,20,16,5,13,30))
+//        binding.statistfan.insertData(intArrayOf(18,2,20,16,5,13,30))
 //        binding.wifiscan.startAnimation
     //        .Scan()
+
+        viewModel.isStart.observe(this){
+            binding.clock.startOrStopAnimationRatotion(!it)
+        }
 
     }
 

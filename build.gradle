@@ -7,6 +7,9 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven {
+            url uri('/repos')
+        }
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.8'
@@ -18,6 +21,9 @@ buildscript {
         classpath 'com.google.firebase:perf-plugin:1.4.1'  // Performance Monitoring plugin
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+
+//        classpath 'com.module.asm.tools:asmplugin:1.0.0'
+
     }
 }
 
@@ -27,6 +33,7 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://jitpack.io' }
+
     }
 }
 

@@ -213,6 +213,7 @@ class MainFragment : BaseFragment<MainFragmentBinding, MainViewModel>() {
         return ipaddr
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun scanWifi() {
         val wifiManager = requireActivity().getSystemService(WifiManager::class.java)
         wifiScanReceiver = object : BroadcastReceiver() {

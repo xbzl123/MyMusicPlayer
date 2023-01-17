@@ -6,8 +6,9 @@ plugins {
     // Apply the Crashlytics Gradle plugin
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+//    id 'myasmplugin'
+
 }
-//apply plugin: 'com.hujiang.android-aspectjx'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -87,9 +88,12 @@ dependencies {
     implementation 'com.github.BugRui:LiveDataBus:1.2.2'
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
+
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.0.0'
 
     implementation 'org.aspectj:aspectjrt:1.9.5'
+
 
 }
