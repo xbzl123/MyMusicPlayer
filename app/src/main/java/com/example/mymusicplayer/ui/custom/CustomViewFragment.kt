@@ -37,15 +37,25 @@ class CustomViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        binding.radarview.setSpeedx2()
-//        binding.radarview.startAnimationScan()
 //        binding.fan.startAnimationRatotion()
 //        binding.statistfan.insertData(intArrayOf(18,2,20,16,5,13,30))
-//        binding.wifiscan.startAnimation
-    //        .Scan()
+//        binding.wifiscan.startAnimationScan()
 
         viewModel.isStart.observe(this){
-            binding.clock.startOrStopAnimationRatotion(!it)
+//            binding.clock.startOrStopAnimationRatotion(!it)
+//            binding.radarview.startOrStopAnimationScan(!it)
+            if (it == true){
+                binding.wifiscan.stopAnimationScan(true)
+            }
+        }
+
+        binding.buttonAdd.setOnClickListener {
+            binding.radarview.setSpeedAdd()
+        }
+
+        binding.buttonReduce.setOnClickListener {
+            binding.radarview.setSpeedReduce()
+
         }
 
     }

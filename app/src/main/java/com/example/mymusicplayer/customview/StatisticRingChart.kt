@@ -24,9 +24,10 @@ class StatisticRingChart @JvmOverloads constructor(
     var progress = 0f
     var degress = 3.6f
     var widthSize = 0
+    //暂时提供7种颜色，后期数据超过7种需要适当增加
     var colorName = arrayOf("黑","绿","蓝","红","黄","靛","灰")
     var colors = intArrayOf(Color.BLACK,Color.GREEN,Color.BLUE,Color.RED,Color.YELLOW,Color.CYAN,Color.GRAY)
-    lateinit var datas:IntArray
+    var datas:IntArray = intArrayOf(1,1,1,1,1,1,1)
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -41,13 +42,16 @@ class StatisticRingChart @JvmOverloads constructor(
             it?.save()
             val rectF = RectF(0f, 0f, widthSize.toFloat(), widthSize.toFloat())
             var total = 0
+            //求总数据的值
             datas.map { total+=it }
             var startAngle = 0f
-            var endAngle = 0f
+            var endAngle: Float
+            //如果旋转中，就把绘制焦点进行角度更改，再进行后续的各扇形绘制
             if(isRotate){
                 it?.rotate(degress*progress,widthSize.toFloat()/2,widthSize.toFloat()/2)
                 totalRotate = degress*progress
             }
+            //绘制各数据所占据的扇形比例
             for (i in 0..datas.size-1){
                 var paint = Paint()
                 paint.color = colors[i]
@@ -57,6 +61,7 @@ class StatisticRingChart @JvmOverloads constructor(
                     ClipBlockList.add(ClipBlock(colors[i],colorName[i],startAngle,startAngle+endAngle))
                 }
                 startAngle += endAngle
+                //旋转结束，计算当前的指针指向的区域是哪个
                 if(isRotateOver){
                     changeValue1 = totalRotate % 360
                     if("" == colorLast){
@@ -71,8 +76,6 @@ class StatisticRingChart @JvmOverloads constructor(
             }
 
             it?.restore()
-
-
             //画箭头指针
             val path = Path()
             path.moveTo(widthSize.toFloat()/2-10,widthSize.toFloat()+20)
@@ -97,6 +100,7 @@ class StatisticRingChart @JvmOverloads constructor(
         }
     }
 
+    //插入数据，在圆盘中生成不同比例的扇形区域
     fun insertData(data: IntArray) {
         datas = data
         invalidate()
@@ -110,7 +114,7 @@ class StatisticRingChart @JvmOverloads constructor(
         path.addCircle(widthSize.toFloat()/2,widthSize.toFloat()/2,widthSize.toFloat()/2,Path.Direction.CW)
         region.setPath(path,Region(0,0,widthSize,widthSize))
 
-        Log.e("tag","region ： "+region.contains(event!!.x.toInt(),event!!.y.toInt()))
+        //如果点击到圆盘之外则返回
         if(!region.contains(event!!.x.toInt(),event!!.y.toInt())){
             return false
         }
@@ -150,8 +154,8 @@ class StatisticRingChart @JvmOverloads constructor(
         }
         return true
     }
-
+    //集合类保存所有的扇形的实时数据
     var ClipBlockList = arrayListOf<ClipBlock>()
 }
-
+//数据类：记录各个扇形的内部信息
 data class ClipBlock(val color: Int,val colorName:String,var startAngle:Float,var endAngle:Float)

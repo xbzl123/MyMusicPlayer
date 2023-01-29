@@ -13,5 +13,4 @@ class CustomViewViewModel : ViewModel() {
         isStart.value = !isStart.value!!
     }
 
-
 }

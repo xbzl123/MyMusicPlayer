@@ -17,13 +17,15 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:orientation="horizontal">
             <com.example.mymusicplayer.customview.RadarView
                 android:id="@+id/radarview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
             </com.example.mymusicplayer.customview.RadarView>
 
@@ -31,7 +33,8 @@
                 android:id="@+id/clock"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
             </com.example.mymusicplayer.customview.Clock>
 
             <com.example.mymusicplayer.customview.Fan
@@ -48,7 +51,6 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:visibility="gone"
             android:orientation="horizontal">
             <com.example.mymusicplayer.customview.StatisticRingChart
                 android:id="@+id/statistfan"
@@ -62,7 +64,8 @@
                 android:id="@+id/wifiscan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:visibility="gone">
             </com.example.mymusicplayer.customview.WifiScan>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -79,7 +82,26 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="@{()->model.setStateStates()}"
+                android:visibility="gone"
                 android:text="开始/停止"
+                >
+            </Button>
+            <Button
+                android:id="@+id/button_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="2倍"
+                android:visibility="gone"
+                >
+            </Button>
+            <Button
+                android:id="@+id/button_reduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="1/2倍"
+                android:visibility="gone"
                 >
             </Button>
         </androidx.appcompat.widget.LinearLayoutCompat>
