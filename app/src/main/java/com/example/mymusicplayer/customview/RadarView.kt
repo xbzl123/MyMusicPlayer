@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
@@ -12,7 +14,7 @@ class RadarView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private var widthReal: Float = 0f
-    private var speed: Long = 1
+    private var speed: Float = 1.0f
     var startAngle = 0f
     
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -23,10 +25,9 @@ class RadarView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas.let {
+            //画背景圆圈9个，使用红色
             var paint = Paint()
             paint.color = Color.RED
-            var rect = RectF()
-            rect.set(widthReal/4,widthReal/4,widthReal*0.75f,widthReal*0.75f)
             paint.strokeWidth = 3f
             paint.style = Paint.Style.STROKE
             it?.save()
@@ -35,7 +36,7 @@ class RadarView @JvmOverloads constructor(
             }
             it?.restore()
 
-            //渐进背景色
+            //绘制扫描扇形，使用渐进背景色，绿色到透明，旋转它使用焦点旋转的方式
             var paintBg = Paint()
             var lg=LinearGradient(widthReal/2,widthReal/2,widthReal/2,widthReal,Color.GREEN,Color.TRANSPARENT,Shader.TileMode.MIRROR)
             paintBg.setShader(lg)
@@ -46,17 +47,31 @@ class RadarView @JvmOverloads constructor(
         }
     }
 
-    fun startAnimationScan(){
-        io.reactivex.Observable.interval(0,50/speed,TimeUnit.MILLISECONDS)
-            .subscribeOn(Schedulers.io()).subscribe(
-            {
-                startAngle = it*3.6f
-                invalidate()
-            }
-        )
-    }
 
-    fun setSpeedx2(){
+    private var disposable : Disposable? = null
+    //动画开始或者停止
+    fun startOrStopAnimationScan(isStart:Boolean) {
+        if (isStart){
+            disposable  = Observable.interval(0, (50/speed).toLong(), TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io()).subscribe {
+                    startAngle += 3.6f
+                    invalidate()
+                }
+        }else{
+            disposable?.dispose()
+            disposable = null
+        }
+    }
+    //旋转速度加倍
+    fun setSpeedAdd(){
         this.speed = speed * 2
+        startOrStopAnimationScan(false)
+        startOrStopAnimationScan(true)
+    }
+    //旋转速度减倍
+    fun setSpeedReduce(){
+        this.speed = speed / 2
+        startOrStopAnimationScan(false)
+        startOrStopAnimationScan(true)
     }
 }
